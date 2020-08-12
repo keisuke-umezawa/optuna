@@ -19,9 +19,10 @@ import sklearn.datasets
 import sklearn.svm
 import sklearn.model_selection
 import optuna
-study = optuna.create_study(storage='sqlite:///example.db')
-study.set_user_attr('contributors', ['Akiba', 'Sano'])
-study.set_user_attr('dataset', 'MNIST')
+
+study = optuna.create_study(storage="sqlite:///example.db")
+study.set_user_attr("contributors", ["Akiba", "Sano"])
+study.set_user_attr("dataset", "MNIST")
 
 
 ###################################################################################################
@@ -35,7 +36,7 @@ study.user_attrs  # {'contributors': ['Akiba', 'Sano'], 'dataset': 'MNIST'}
 # :func:`~optuna.study.get_all_study_summaries`, also contains user-defined attributes.
 
 
-study_summaries = optuna.get_all_study_summaries('sqlite:///example.db')
+study_summaries = optuna.get_all_study_summaries("sqlite:///example.db")
 study_summaries[0].user_attrs  # {'contributors': ['Akiba', 'Sano'], 'dataset': 'MNIST'}
 
 
@@ -57,11 +58,11 @@ def objective(trial):
     iris = sklearn.datasets.load_iris()
     x, y = iris.data, iris.target
 
-    svc_c = trial.suggest_loguniform('svc_c', 1e-10, 1e10)
+    svc_c = trial.suggest_loguniform("svc_c", 1e-10, 1e10)
     clf = sklearn.svm.SVC(C=svc_c)
     accuracy = sklearn.model_selection.cross_val_score(clf, x, y).mean()
 
-    trial.set_user_attr('accuracy', accuracy)
+    trial.set_user_attr("accuracy", accuracy)
 
     return 1.0 - accuracy  # return error for minimization
 
